@@ -9353,14 +9353,7 @@ var _user$project$Main$viewNode = F2(
 		var text = _p0._0;
 		var coords = _p0._1;
 		var anim = _p0._2;
-		var x = function () {
-			var _p1 = anim;
-			if (_p1.ctor === 'Nothing') {
-				return 0;
-			} else {
-				return A2(_mgold$elm_animation$Animation$animate, clock, _p1._0);
-			}
-		}();
+		var x = A2(_mgold$elm_animation$Animation$animate, clock, anim);
 		var styles = _elm_lang$html$Html_Attributes$style(
 			{
 				ctor: '::',
@@ -9410,16 +9403,51 @@ var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
-		elements);
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'font-size', _1: '24px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'text-decoration', _1: 'underline'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Click Anywhere'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					elements),
+				_1: {ctor: '[]'}
+			}
+		});
 };
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p1 = msg;
+		switch (_p1.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'Click':
-				var _p3 = _p2._0;
+				var _p2 = _p1._0;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -9433,15 +9461,14 @@ var _user$project$Main$update = F2(
 									_0: {
 										ctor: '_Tuple3',
 										_0: 'Hello World',
-										_1: _p3,
-										_2: _elm_lang$core$Maybe$Just(
+										_1: _p2,
+										_2: A2(
+											_mgold$elm_animation$Animation$to,
+											_elm_lang$core$Basics$toFloat(_p2.x) + 200,
 											A2(
-												_mgold$elm_animation$Animation$to,
-												_elm_lang$core$Basics$toFloat(_p3.x) + 200,
-												A2(
-													_mgold$elm_animation$Animation$from,
-													_elm_lang$core$Basics$toFloat(_p3.x),
-													_mgold$elm_animation$Animation$animation(model.clock))))
+												_mgold$elm_animation$Animation$from,
+												_elm_lang$core$Basics$toFloat(_p2.x),
+												_mgold$elm_animation$Animation$animation(model.clock)))
 									},
 									_1: {ctor: '[]'}
 								})
@@ -9453,23 +9480,14 @@ var _user$project$Main$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{clock: _p2._0}),
+						{clock: _p1._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});
 var _user$project$Main$model = {
 	clock: 0,
-	hellos: {
-		ctor: '::',
-		_0: {
-			ctor: '_Tuple3',
-			_0: 'Hello World',
-			_1: {x: 0, y: 0},
-			_2: _elm_lang$core$Maybe$Nothing
-		},
-		_1: {ctor: '[]'}
-	}
+	hellos: {ctor: '[]'}
 };
 var _user$project$Main$Model = F2(
 	function (a, b) {

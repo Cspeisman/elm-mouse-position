@@ -18,7 +18,7 @@ type alias Model =
 
 
 model =
-    { clock = 0, hellos = [ ( "Hello World", { x = 0, y = 0 }, Nothing ) ] }
+    { clock = 0, hellos = [] }
 
 
 type Msg
@@ -38,11 +38,10 @@ update msg model =
                     model.hellos
                         ++ [ ( "Hello World"
                              , position
-                             , Just
-                                (Animation.animation model.clock
+                             , (Animation.animation model.clock
                                     |> from (toFloat position.x)
                                     |> to ((position.x |> toFloat) + 200)
-                                )
+                               )
                              )
                            ]
               }
@@ -65,7 +64,17 @@ view model =
         elements =
             List.map (viewNode model.clock) model.hellos
     in
-        Html.div [] elements
+        Html.div []
+            [ Html.div
+                [ style
+                    [ ( "font-size", "24px" )
+                    , ( "text-align", "center" )
+                    , ( "text-decoration", "underline" )
+                    ]
+                ]
+                [ Html.text "Click Anywhere" ]
+            , Html.div [] elements
+            ]
 
 
 viewNode clock node =
@@ -74,12 +83,7 @@ viewNode clock node =
             node
 
         x =
-            case anim of
-                Nothing ->
-                    0
-
-                Just a ->
-                    Animation.animate clock a
+            Animation.animate clock anim
 
         styles =
             style
