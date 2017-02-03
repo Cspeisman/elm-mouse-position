@@ -14,18 +14,17 @@ main =
 
 
 type alias Model =
-    { clock : Time, activeAnimation : Maybe Animation, hello : List String }
+    { clock : Time, hello : List String }
 
 
 model =
-    { clock = 0, hellos = [ ( "Hello World", { x = 0, y = 0 } ) ], activeAnimation = Nothing }
+    { clock = 0, hellos = [ ( "Hello World", { x = 0, y = 0 }, Nothing ) ] }
 
 
 type Msg
     = NoOp
     | Tick Time
     | Click Mouse.Position
-    | Animate
 
 
 update msg model =
@@ -34,13 +33,24 @@ update msg model =
             ( model, Cmd.none )
 
         Click position ->
-            ( { model | hellos = model.hellos ++ [ ( "Hello World", position ) ] }, Cmd.none )
+            ( { model
+                | hellos =
+                    model.hellos
+                        ++ [ ( "Hello World"
+                             , position
+                             , Just
+                                (Animation.animation model.clock
+                                    |> from (toFloat position.x)
+                                    |> to ((position.x |> toFloat) + 200)
+                                )
+                             )
+                           ]
+              }
+            , Cmd.none
+            )
 
         Tick time ->
             ( { model | clock = time }, Cmd.none )
-
-        Animate ->
-            ( { model | activeAnimation = Just (Animation.animation model.clock |> from 0 |> to 200) }, Cmd.none )
 
 
 subscriptions model =
@@ -52,41 +62,30 @@ subscriptions model =
 
 view model =
     let
-        x =
-            case model.activeAnimation of
-                Nothing ->
-                    0
-
-                Just a ->
-                    Animation.animate model.clock a
-
         elements =
-            List.map (viewNode model.activeAnimation) model.hellos
+            List.map (viewNode model.clock) model.hellos
     in
-        Debug.log (toString x)
-            Html.div
-            []
-            elements
+        Html.div [] elements
 
 
-viewNode activeAnimation node =
+viewNode clock node =
     let
+        ( text, coords, anim ) =
+            node
+
         x =
-            case activeAnimation of
+            case anim of
                 Nothing ->
                     0
 
                 Just a ->
-                    Animation.animate model.clock a
-
-        ( text, coords ) =
-            node
+                    Animation.animate clock a
 
         styles =
             style
                 [ ( "position", "absolute" )
                 , ( "top", (toString coords.y) ++ "px" )
-                , ( "left", (toString coords.x) ++ "px" )
+                , ( "left", (toString x) ++ "px" )
                 ]
     in
         Html.div [ styles ] [ Html.text text ]
