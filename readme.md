@@ -1,4 +1,4 @@
-Simple Elm example of how to track mouse positioning
+### Simple Elm example for how to track mouse position and do animations
 
 
 ### demo
